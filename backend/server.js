@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const professionalRoute = require("./routes/professional");
-const mongodb = require("./db/connect");
+const mongodb = require("./db/connect.js");
 
 const port = process.env.PORT || 8080;
 
@@ -41,6 +41,12 @@ app.get("/", (req, res) => {
 //   });
 // });
 
-app.listen(process.env.PORT || 8080, () => {
-  console.log("Server is running on port 8080");
+mongodb.initDb((err) => {
+  if (err) {
+    console.error("Failed to connect to MongoDB:", err);
+    process.exit(1);
+  } else {
+    app.listen(port);
+    console.log("Connected to MongoDB and listening on port", port);
+  }
 });
